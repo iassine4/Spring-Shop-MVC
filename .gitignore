@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Env files #########
+.env
+.env.*
+
+# OS (Windows / Mac) ###########
+.DS_Store
+Thumbs.db
+
+# Java #############
+*.class
