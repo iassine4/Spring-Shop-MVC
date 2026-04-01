@@ -15,16 +15,15 @@
     <div class="row">
         <div class="col-md-10 offset-md-1">
 
-            <!-- En-tête de la page -->
+            <!-- En-tête -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="mb-0">Liste des articles</h1>
-                <a href="#" class="btn btn-primary">Add article</a>
+                <a href="#" class="btn btn-primary">Ajouter article</a>
             </div>
 
-            <!-- Carte Bootstrap pour encadrer le tableau -->
+            <!-- Tableau -->
             <div class="card shadow-sm">
                 <div class="card-body">
-
                     <table class="table table-striped table-hover table-bordered align-middle mb-0">
                         <thead class="table-dark">
                         <tr>
@@ -43,9 +42,42 @@
                         </tr>
                         </tbody>
                     </table>
-
                 </div>
             </div>
+
+            <!-- Pagination -->
+            <nav class="mt-4" th:if="${totalPages > 0}">
+                <ul class="pagination justify-content-center">
+
+                    <!-- Bouton précédent -->
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/index(page=${currentPage - 1})}">
+                            Précédent
+                        </a>
+                    </li>
+
+                    <!-- Numéros de pages -->
+                    <li class="page-item"
+                        th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${pageNumber == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/index(page=${pageNumber})}"
+                           th:text="${pageNumber + 1}">
+                        </a>
+                    </li>
+
+                    <!-- Bouton suivant -->
+                    <li class="page-item"
+                        th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/index(page=${currentPage + 1})}">
+                            Suivant
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
 
         </div>
     </div>
