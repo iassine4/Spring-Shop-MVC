@@ -21,6 +21,26 @@
                 <a href="#" class="btn btn-primary">Ajouter article</a>
             </div>
 
+            <!-- Formulaire de recherche -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" th:action="@{/index}" class="row g-3">
+                        <div class="col-md-10">
+                            <input type="text"
+                                   name="keyword"
+                                   class="form-control"
+                                   placeholder="Search by description"
+                                   th:value="${keyword}">
+                        </div>
+                        <div class="col-md-2 d-grid">
+                            <button type="submit" class="btn btn-outline-primary">
+                                Chercher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Tableau -->
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -40,6 +60,13 @@
                             <td th:text="${article.brand}"></td>
                             <td th:text="${article.price}"></td>
                         </tr>
+
+                        <!-- Message si aucun résultat -->
+                        <tr th:if="${#lists.isEmpty(articles)}">
+                            <td colspan="4" class="text-center">
+                                Aucun article trouvé
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -52,17 +79,17 @@
                     <!-- Bouton précédent -->
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/index(page=${currentPage - 1})}">
+                           th:href="@{/index(page=${currentPage - 1}, keyword=${keyword})}">
                             Précédent
                         </a>
                     </li>
 
-                    <!-- Numéros de pages -->
+                    <!-- Numéros de page -->
                     <li class="page-item"
                         th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                         th:classappend="${pageNumber == currentPage} ? 'active'">
                         <a class="page-link"
-                           th:href="@{/index(page=${pageNumber})}"
+                           th:href="@{/index(page=${pageNumber}, keyword=${keyword})}"
                            th:text="${pageNumber + 1}">
                         </a>
                     </li>
@@ -71,7 +98,7 @@
                     <li class="page-item"
                         th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/index(page=${currentPage + 1})}">
+                           th:href="@{/index(page=${currentPage + 1}, keyword=${keyword})}">
                             Suivant
                         </a>
                     </li>

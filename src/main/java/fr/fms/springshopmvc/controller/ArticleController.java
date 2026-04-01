@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ArticleController {
 
+    // Nombre d'articles affichés par page
+    private static final int PAGE_SIZE = 5;
+
     private final ArticleRepository articleRepository;
 
     /**
@@ -22,6 +25,7 @@ public class ArticleController {
      * Spring fournit automatiquement l'objet nécessaire.
      */
     public ArticleController(ArticleRepository articleRepository) {
+
         this.articleRepository = articleRepository;
     }
 
@@ -34,15 +38,24 @@ public class ArticleController {
      * /index?page=2
      */
     @GetMapping("/index")
-    public String showArticles(
-            Model model,
-            @RequestParam(name = "page", defaultValue = "0") int page) {
+    public String showArticles(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
+                                @RequestParam(name = "keyword", defaultValue = "") String keyword) {
 
-        // Nombre d'articles affichés par page
-        int pageSize = 5;
+        Page<Article> articlePage;
 
-        // On demande à Spring Data une page d'articles
-        Page<Article> articlePage = articleRepository.findAll(PageRequest.of(page, pageSize));
+        // Si aucun mot-clé n'est saisi, on affiche tous les articles
+        if (keyword == null || keyword.trim().isEmpty()) {
+
+            // On demande à Spring Data une page d'articles
+            articlePage = articleRepository.findAll(PageRequest.of(page, PAGE_SIZE));
+        } else {
+
+            // Sinon on affiche uniquement les articles filtrés par mot-clé
+            articlePage = articleRepository.findByDescriptionContainingIgnoreCase(
+                    keyword,
+                    PageRequest.of(page, PAGE_SIZE)
+            );
+        }
 
         // Liste des articles de la page courante
         model.addAttribute("articles", articlePage.getContent());
@@ -52,6 +65,9 @@ public class ArticleController {
 
         // Nombre total de pages
         model.addAttribute("totalPages", articlePage.getTotalPages());
+
+        // On renvoie le mot-clé à la vue pour le garder affiché dans l'input
+        model.addAttribute("keyword", keyword);
 
         // Retour vers la vue Thymeleaf
         return "articles";
