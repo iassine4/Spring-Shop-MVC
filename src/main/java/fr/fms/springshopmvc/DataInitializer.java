@@ -21,14 +21,14 @@ public class DataInitializer {
           //  articleRepository.save(new Article(null, "Smartphone Galaxy S24", "Samsung", 899.99));
           //  articleRepository.save(new Article(null, "TV OLED 55 pouces", "LG", 1199.99));
           //  articleRepository.save(new Article(null, "Laptop Inspiron", "Dell", 749.99));
-            articleRepository.save(new Article(null, "Smartphone Galaxy S24", "Samsung", 899.99));
-            articleRepository.save(new Article(null, "TV OLED 55 pouces", "LG", 1199.99));
-            articleRepository.save(new Article(null, "Laptop Inspiron", "Dell", 749.99));
-            articleRepository.save(new Article(null, "iPhone 15", "Apple", 1099.99));
-            articleRepository.save(new Article(null, "Monitor 27 pouces", "AOC", 229.99));
-            articleRepository.save(new Article(null, "Mouse MX Master", "Logitech", 99.99));
-            articleRepository.save(new Article(null, "Keyboard K95", "Corsair", 179.99));
-            articleRepository.save(new Article(null, "Tablet Galaxy Tab", "Samsung", 499.99));
+           // articleRepository.save(new Article(null, "Smartphone Galaxy S24", "Samsung", 899.99));
+           // articleRepository.save(new Article(null, "TV OLED 55 pouces", "LG", 1199.99));
+           // articleRepository.save(new Article(null, "Laptop Inspiron", "Dell", 749.99));
+           // articleRepository.save(new Article(null, "iPhone 15", "Apple", 1099.99));
+           // articleRepository.save(new Article(null, "Monitor 27 pouces", "AOC", 229.99));
+           // articleRepository.save(new Article(null, "Mouse MX Master", "Logitech", 99.99));
+            //articleRepository.save(new Article(null, "Keyboard K95", "Corsair", 179.99));
+            //articleRepository.save(new Article(null, "Tablet Galaxy Tab", "Samsung", 499.99));
         };
     }
 }

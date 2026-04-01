@@ -30,12 +30,8 @@ public class ArticleController {
     }
 
     /**
-     * Affiche une page d'articles.
-     *
-     * Exemple :
-     * /index?page=0
-     * /index?page=1
-     * /index?page=2
+     * Affiche la liste paginée des articles
+     * avec ou sans filtre sur la description.
      */
     @GetMapping("/index")
     public String showArticles(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
@@ -71,5 +67,22 @@ public class ArticleController {
 
         // Retour vers la vue Thymeleaf
         return "articles";
+    }
+
+    /**
+     * Supprime un article à partir de son identifiant,
+     * puis redirige vers la liste en conservant la page et le mot-clé.
+     */
+    @GetMapping("/deleteArticle")
+    public String deleteArticle(
+            @RequestParam(name = "id") Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+
+        // Suppression de l'article en base
+        articleRepository.deleteById(id);
+
+        // Redirection vers la liste en gardant le contexte utilisateur
+        return "redirect:/index?page=" + page + "&keyword=" + keyword;
     }
 }
