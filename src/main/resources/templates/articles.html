@@ -61,6 +61,10 @@
                             <td th:text="${article.brand}"></td>
                             <td th:text="${article.price}"></td>
                             <td>
+                                <a class="btn btn-warning btn-sm me-2"
+                                   th:href="@{/editArticle(id=${article.id}, page=${currentPage}, keyword=${keyword})}">
+                                    Modifier
+                                </a>
                                 <a class="btn btn-danger btn-sm"
                                    th:href="@{/deleteArticle(id=${article.id}, page=${currentPage}, keyword=${keyword})}"
                                    onclick="return confirm('Confirmer la suppression de cet article ?');">

@@ -2,12 +2,18 @@ package fr.fms.springshopmvc.controller;
 
 import fr.fms.springshopmvc.entity.Article;
 import fr.fms.springshopmvc.repository.ArticleRepository;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 /**
  * Contrôleur MVC chargé de gérer l'affichage des articles.
@@ -83,6 +89,54 @@ public class ArticleController {
         articleRepository.deleteById(id);
 
         // Redirection vers la liste en gardant le contexte utilisateur
+        return "redirect:/index?page=" + page + "&keyword=" + keyword;
+    }
+    /**
+     * Affiche le formulaire d'édition d'un article existant.
+     */
+    @GetMapping("/editArticle")
+    public String editArticle(
+            @RequestParam(name = "id") Long id,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            Model model) {
+
+        Optional<Article> optionalArticle = articleRepository.findById(id);
+
+        if (optionalArticle.isEmpty()) {
+            return "redirect:/index?page=" + page + "&keyword=" + keyword;
+        }
+
+        // Article à modifier
+        model.addAttribute("article", optionalArticle.get());
+
+        // Infos conservées pour revenir à la bonne page après sauvegarde
+        model.addAttribute("page", page);
+        model.addAttribute("keyword", keyword);
+
+        return "form/article-form";
+    }
+    /**
+     * Enregistre la mise à jour d'un article.
+     */
+    @PostMapping("/saveArticle")
+    public String saveArticle(
+            @Valid @ModelAttribute("article") Article article,
+            BindingResult bindingResult,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            Model model) {
+
+        // Si le formulaire contient des erreurs, on réaffiche la page
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("page", page);
+            model.addAttribute("keyword", keyword);
+            return "article-form";
+        }
+
+        // save() fait insert ou update selon que l'id existe déjà ou non
+        articleRepository.save(article);
+
         return "redirect:/index?page=" + page + "&keyword=" + keyword;
     }
 }
