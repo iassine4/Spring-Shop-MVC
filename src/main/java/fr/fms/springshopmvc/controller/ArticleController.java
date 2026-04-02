@@ -74,6 +74,27 @@ public class ArticleController {
         // Retour vers la vue Thymeleaf
         return "articles";
     }
+    /**
+     * Affiche un formulaire vide pour ajouter un nouvel article.
+     */
+    @GetMapping("/addArticle")
+    public String addArticle(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            Model model) {
+
+        // On crée un article vide pour le formulaire
+        model.addAttribute("article", new Article());
+
+        // Sert à personnaliser le titre de la page
+        model.addAttribute("formMode", "add");
+
+        // Sert à revenir à la bonne page après enregistrement
+        model.addAttribute("page", page);
+        model.addAttribute("keyword", keyword);
+
+        return "form/article-form";
+    }
 
     /**
      * Supprime un article à partir de son identifiant,
