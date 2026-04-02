@@ -152,7 +152,7 @@ public class ArticleController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("page", page);
             model.addAttribute("keyword", keyword);
-            return "article-form";
+            return "form/article-form";
         }
 
         // save() fait insert ou update selon que l'id existe déjà ou non
