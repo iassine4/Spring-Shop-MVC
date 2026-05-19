@@ -1,15 +1,10 @@
 package fr.fms.springshopmvc.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Représente un article de la boutique.
@@ -47,4 +42,16 @@ public class Article {
      */
     @Min(value = 1, message = "Le prix doit être supérieur à 0")
     private double price;
+
+    /**
+     * Catégorie associée à l'article.
+     *
+     * Plusieurs articles peuvent appartenir à une même catégorie.
+     * La colonne category_id sera créée dans la table article.
+     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Category category;
 }
