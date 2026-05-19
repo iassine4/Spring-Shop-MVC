@@ -24,10 +24,38 @@
                 </a>
             </div>
 
+            <!-- Filtre par catégorie -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <!-- Bouton pour tout afficher -->
+                        <a class="btn"
+                           th:classappend="${selectedCategoryId == null} ? ' btn-dark' : ' btn-outline-dark'"
+                           th:href="@{/index(page=0, keyword=${keyword})}">
+                            Toute les catégories
+                        </a>
+
+                        <!-- Boutons des catégories -->
+                        <a th:each="category : ${categories}"
+                           class="btn"
+                           th:classappend="${selectedCategoryId == category.id} ? ' btn-primary' : ' btn-outline-primary'"
+                           th:href="@{/index(page=0, keyword=${keyword}, categoryId=${category.id})}"
+                           th:text="${category.name}">
+                            Catégorie
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Formulaire de recherche -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body">
                     <form method="get" th:action="@{/index}" class="row g-3">
+
+                        <!-- Champ caché pour garder l'id -->
+                        <input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+
                         <div class="col-md-10">
                             <input type="text"
                                    name="keyword"
@@ -50,6 +78,7 @@
                     <table class="table table-striped table-hover table-bordered align-middle mb-0">
                         <thead class="table-dark">
                         <tr>
+                            <th>Category</th>
                             <th>Id</th>
                             <th>Description</th>
                             <th>Brand</th>
@@ -59,17 +88,18 @@
                         </thead>
                         <tbody>
                         <tr th:each="article : ${articles}">
+                            <td th:text="${article.category != null ? article.category.name : 'No category'}"></td>
                             <td th:text="${article.id}"></td>
                             <td th:text="${article.description}"></td>
                             <td th:text="${article.brand}"></td>
                             <td th:text="${article.price}"></td>
                             <td>
                                 <a class="btn btn-warning btn-sm me-2"
-                                   th:href="@{/editArticle(id=${article.id}, page=${currentPage}, keyword=${keyword})}">
+                                   th:href="@{/editArticle(id=${article.id}, page=${currentPage}, keyword=${keyword}, categoryId=${selectedCategoryId})}">
                                     Modifier
                                 </a>
                                 <a class="btn btn-danger btn-sm"
-                                   th:href="@{/deleteArticle(id=${article.id}, page=${currentPage}, keyword=${keyword})}"
+                                   th:href="@{/deleteArticle(id=${article.id}, page=${currentPage}, keyword=${keyword}, categoryId=${selectedCategoryId})}"
                                    onclick="return confirm('Confirmer la suppression de cet article ?');">
                                     Supprimer
                                 </a>
@@ -94,7 +124,7 @@
                     <!-- Bouton précédent -->
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/index(page=${currentPage - 1}, keyword=${keyword})}">
+                           th:href="@{/index(page=${currentPage - 1}, keyword=${keyword}, categoryId=${selectedCategoryId})}">
                             Précédent
                         </a>
                     </li>
@@ -104,7 +134,7 @@
                         th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                         th:classappend="${pageNumber == currentPage} ? 'active'">
                         <a class="page-link"
-                           th:href="@{/index(page=${pageNumber}, keyword=${keyword})}"
+                           th:href="@{/index(page=${pageNumber}, keyword=${keyword}, categoryId=${selectedCategoryId})}"
                            th:text="${pageNumber + 1}">
                         </a>
                     </li>
@@ -113,7 +143,7 @@
                     <li class="page-item"
                         th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/index(page=${currentPage + 1}, keyword=${keyword})}">
+                           th:href="@{/index(page=${currentPage + 1}, keyword=${keyword}, categoryId=${selectedCategoryId})}">
                             Suivant
                         </a>
                     </li>

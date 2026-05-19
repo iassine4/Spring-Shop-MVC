@@ -13,6 +13,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    /**
+     * Recherche paginée par mot-clé sur la description.
+     */
     Page<Article> findByDescriptionContainingIgnoreCase(String keyword, Pageable pageable);
 
+    /**
+     * Recherche paginée des articles d'une catégorie.
+     */
+    Page<Article> findByCategoryId(Long categoryId, Pageable pageable);
+
+    /**
+     * Recherche paginée des articles d'une catégorie
+     * dont la description contient un mot-clé.
+     */
+    Page<Article> findByCategoryIdAndDescriptionContainingIgnoreCase(
+            Long categoryId,
+            String keyword,
+            Pageable pageable
+    );
 }
